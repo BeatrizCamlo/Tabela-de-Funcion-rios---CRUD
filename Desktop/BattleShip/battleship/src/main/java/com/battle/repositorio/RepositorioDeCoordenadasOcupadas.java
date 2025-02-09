@@ -14,4 +14,9 @@ public class RepositorioDeCoordenadasOcupadas {
         coordenadasOcupadas.add(coordenadas);
     }
 
+    public boolean presenteNoRepositorio(Coordenadas coordenadas) {
+        return coordenadasOcupadas.contains(coordenadas);
+
+    }
+
 }

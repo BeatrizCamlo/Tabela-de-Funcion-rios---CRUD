@@ -50,10 +50,9 @@ public class GameView {
     }
 
     public void game() {
-        game.tabuleiroMatrix();
-        game.inciarTabuleiro();
         game.inserirTodosBarcos();
-        game.tabuleiroComBarcos();
+        game.exibirTabuleiro();
+
     }
 
 
