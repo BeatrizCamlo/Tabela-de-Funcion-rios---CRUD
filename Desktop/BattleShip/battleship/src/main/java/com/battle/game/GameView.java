@@ -51,7 +51,8 @@ public class GameView {
 
     public void game() {
         game.inserirTodosBarcos();
-        game.exibirTabuleiro();
+        game.inicializarTabuleiro();
+        game.verificarCoordenasEscolhidas();
 
     }
 

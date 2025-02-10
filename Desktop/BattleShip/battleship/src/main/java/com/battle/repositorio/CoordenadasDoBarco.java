@@ -14,4 +14,8 @@ public class CoordenadasDoBarco {
     public void inserirCoordenadasDoBarco(Coordenadas coordenadas) {
         coordenadasDoBarco.add(coordenadas);
     }
+
+    public boolean coordenadaDeBarcoExiste(Coordenadas coordenadas) {
+        return coordenadasDoBarco.contains(coordenadas);
+    }
 }

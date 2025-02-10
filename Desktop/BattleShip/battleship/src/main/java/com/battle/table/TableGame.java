@@ -5,15 +5,27 @@ import com.battle.repositorio.Coordenadas;
 import com.battle.repositorio.CoordenadasDoBarco;
 import com.battle.repositorio.RepositorioDeCoordenadasOcupadas;
 import java.util.Random;
+import java.util.Scanner;
 
 public class TableGame {
-    private int largura;
-    private int altura;
+    private boolean gameOver = false;
+    private Scanner sc = new Scanner(System.in);
+    private final int largura;
+    private final int altura;
     private RepositorioDeCoordenadasOcupadas coordenadasOcupadas;
     private char[][] tabuleiroOculto;
+    private char[][] tabuleiro;
     private boolean[][] tabuleiroOcupado;
     private Barco[] barcos;
     private Random random = new Random();
+
+    public int getLargura() {
+        return largura;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
 
     public TableGame(int largura, int altura) {
         this.largura = largura;
@@ -21,6 +33,7 @@ public class TableGame {
         coordenadasOcupadas = new RepositorioDeCoordenadasOcupadas();
         this.tabuleiroOculto = new char[altura][largura];
         this.tabuleiroOcupado = new boolean[altura][largura];
+        this.tabuleiro = new char[altura][largura];
         inicializarTabuleiro();
 
         barcos = new Barco[]{
@@ -31,10 +44,11 @@ public class TableGame {
         };
     }
 
-    private void inicializarTabuleiro() {
+    public void inicializarTabuleiro() {
         for (int i = 0; i < altura; i++) {
             for (int j = 0; j < largura; j++) {
                 tabuleiroOculto[i][j] = '~';
+                tabuleiro[i][j] = '~';
             }
         }
     }
@@ -44,10 +58,10 @@ public class TableGame {
             boolean barcoInserido = false;
             int tentativas = 0;
 
-            while (!barcoInserido && tentativas < 100) { // Evita loop infinito
+            while (!barcoInserido && tentativas < 100) {
                 int x = random.nextInt(largura);
                 int y = random.nextInt(altura);
-                boolean vertical = random.nextBoolean(); // Aleatoriza a orientação do barco
+                boolean vertical = random.nextBoolean();
 
                 if (podeInserirBarco(x, y, barco, vertical)) {
                     inserirBarcoNoTabuleiro(x, y, barco, vertical);
@@ -110,10 +124,54 @@ public class TableGame {
 
             if (novoX >= 0 && novoX < largura && novoY >= 0 && novoY < altura && !tabuleiroOcupado[novoY][novoX]) {
                 tabuleiroOcupado[novoY][novoX] = true;
-                tabuleiroOculto[novoY][novoX] = 'A';
+                //tabuleiroOculto[novoY][novoX] = 'A';
                 coordenadasOcupadas.inserir(new Coordenadas(novoX, novoY));
             }
         }
+    }
+
+    public void verificarCoordenasEscolhidas(int largura, int altura) {
+        switch (tabuleiroOculto[altura][largura]){
+            case '~': tabuleiro[altura][largura] = 'X'; break;
+            case 'S': tabuleiro[altura][largura] = 'S'; break;
+            case 'T': tabuleiro[altura][largura] = 'T'; break;
+            case 'C': tabuleiro[altura][largura] = 'C'; break;
+            case 'E': tabuleiro[altura][largura] = 'E'; break;
+        }
+    }
+
+    public void inserirCoordenadas(){
+        int altura, largura;
+
+        System.out.print("Insira as coordenadas para abater a frota inimiga: (" + getAltura() + ", " + getLargura() + ")");
+
+        do {
+            System.out.print("Altura: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Entrada inválida! Digite um número inteiro entre 8 e 20.");
+                sc.next();
+            }
+            altura = sc.nextInt();
+
+            System.out.print("Largura: ");
+            while (!sc.hasNextInt()) {
+                System.out.println("Entrada inválida! Digite um número inteiro entre 8 e 20.");
+                sc.next();
+            }
+            largura = sc.nextInt();
+
+            if (altura < 0 || altura > getAltura() || largura < 0 || largura > getLargura()) {
+                System.out.println("Dimensões inválidas! O tabuleiro deve ter entre 0 e" + getAltura() + " (Altura), e 0 e" + getLargura() + " (Largura)");
+            }
+        }while (altura < 0 || altura > getAltura() || largura < 0 || largura > getLargura());
+
+        verificarCoordenasEscolhidas(altura, largura);
+    }
+
+    public boolean existeBarcosNaoEncontrados(){
+        boolean existe = false;
+
+
     }
 
     public void exibirTabuleiro() {
@@ -126,9 +184,11 @@ public class TableGame {
         for (int i = 0; i < altura; i++) {
             System.out.print(i + " ");
             for (int j = 0; j < largura; j++) {
-                System.out.print(tabuleiroOculto[i][j] + " ");
+                System.out.print(tabuleiro[i][j] + " ");
             }
             System.out.println();
         }
     }
+
+
 }
