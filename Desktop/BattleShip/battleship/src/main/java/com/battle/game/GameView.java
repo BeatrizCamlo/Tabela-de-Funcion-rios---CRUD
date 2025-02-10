@@ -52,7 +52,7 @@ public class GameView {
     public void game() {
         game.inserirTodosBarcos();
         game.inicializarTabuleiro();
-        game.verificarCoordenasEscolhidas();
+        game.inserirCoordenadas();
 
     }
 
